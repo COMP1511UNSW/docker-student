@@ -1,0 +1,31 @@
+#!/bin/bash
+unset DEBIAN_FRONTEND
+
+cd /root
+
+if test $# = 0
+then
+    cat <<'real-eof'
+
+Try out dcc and autotest like this:
+
+$ cat <<eof >bad_pun.c
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello, it is good to see you!\n");
+}
+eof
+$ dcc bad_pun.c -o bad_pun
+$ ./bad_pun
+Hello, it is good to see you!
+$ autotest bad_pun
+....
+
+real-eof
+
+	export PS1='$ '
+    bash -l
+else
+    "$@"
+fi
