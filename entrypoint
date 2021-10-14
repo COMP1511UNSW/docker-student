@@ -20,7 +20,14 @@ $ dcc bad_pun.c -o bad_pun
 $ ./bad_pun
 Hello, it is good to see you!
 $ autotest bad_pun
+Test 0 (./bad_pun) - failed (incorrect output)
+Your program produced these 1 lines of output before it was terminated:
 ....
+$ sed -i s/see/C/ bad_pun.c 
+root@d8fecc0feb55:~# autotest bad_pun
+$ dcc -o bad_pun bad_pun.c
+Test 0 (./bad_pun) - passed
+1 tests passed 0 tests failed 
 
 real-eof
 

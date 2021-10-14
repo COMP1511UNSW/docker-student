@@ -1,7 +1,8 @@
-Container to demostrate [COMP1511](http://cse.unsw.edu.au/~cs1511) tools used by students
+Container to demonstrate [COMP1511](http://cse.unsw.edu.au/~cs1511) tools used by students
 
 * dcc
 * autotest
+* c_check TBA
 * style TBA
 
 Run with SYS_PTRACE like this:
