@@ -38,6 +38,7 @@ RUN \
 		gedit \
 		python3 \
 		python3-clang \
+		python3-termcolor \
 		valgrind \
 		nano \
 		rsync \
@@ -69,22 +70,43 @@ RUN \
 	chmod -R o+rX autotest
 
 
+# install latest version of c_check
+
+RUN \
+	mkdir -p -m 755 /usr/local/lib/ &&\
+	cd /usr/local/lib/ &&\
+	curl -L --silent https://github.com/COMP1511UNSW/c_check/archive/refs/heads/main.zip -o c_check.zip &&\
+	unzip c_check.zip &&\
+	rm c_check.zip && \
+	mv c_check-main c_check && \
+	chmod -R o+rX c_check
+
+# 
+ADD c_check /usr/local/bin/c_check 
+
 # install datafiles for autotest & wrapper shell scripts
 	
 RUN \
 	course=cs1511 &&\
 	term=21T2 &&\
 	cd /usr/local/lib &&\
+ 
     curl -L  --silent https://cgi.cse.unsw.edu.au/~${course}/$term/cgi/download_autotests.cgi | \
     	tar -Jxf - activities &&\
     mv activities 1511_activities &&\
-    echo '#!/bin/sh' >/usr/local/bin/1511 &&\
-    echo 'exec "$@"' >>/usr/local/bin/1511 &&\
+
+    echo $'#!/bin/sh\n\
+exec "$@"' >/usr/local/bin/1511 &&\
+ 
     chmod 755 /usr/local/bin/1511 &&\
-    echo '#!/bin/sh' >/usr/local/bin/autotest &&\
-    echo 'exec /usr/local/lib/autotest/autotest.py --exercise_directory /usr/local/lib/1511_activities "$@"' >>/usr/local/bin/autotest &&\
+
+    echo $'#!/bin/sh\n\
+exec /usr/local/lib/autotest/autotest.py --exercise_directory /usr/local/lib/1511_activities "$@"' >>/usr/local/bin/autotest &&\
+
     chmod 755 /usr/local/bin/autotest
 
 	
-ADD /entrypoint entrypoint
+
+ADD entrypoint /entrypoint
+
 ENTRYPOINT ["/entrypoint"]
